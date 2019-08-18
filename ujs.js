@@ -6,20 +6,13 @@
  * Date: 2019-08-15
  */
 (function (global, factory) {
-  "use strict"
-  if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = global.document ?
-      factory(global, true) :
-      function (w) {
-        if (!w) {
-          throw new Error('requires a window with a document')
-        }
-        return factory(w)
-      }
-  } else {
-    factory(global)
-  }
+  typeof exports === 'object' && typeof module === 'object' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+      typeof define === 'function' && define.cmd ? define(factory) :
+        (global.ujs = factory(global))
 })(typeof window !== 'undefined' ? window : this, function (window, noGlobal) {
+  'use strict'
+  let version = '1.0.0'
 
   let _ujs = new Proxy({}, {
     set(target, key, value, receiver) {
@@ -311,6 +304,7 @@
 
 
   _ujs.EmitClass = EmitClass    // 事件监听及分发
+  _ujs.version = version
 
   // Object.keys(_ujs).forEach(it => {
   //   Object.prototype[it] = _ujs[it]
