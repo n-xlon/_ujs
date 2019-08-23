@@ -154,9 +154,29 @@
     return Object.prototype.toString.call(obj) === '[object Object]'
   }
 
+  // 判断所期望的值是否在已知的对象或数组中
+  _ujs.isHas = (name, target) => {
+    if (_ujs.isObject(target)) {
+      return target.hasOwnProperty(name) && name in target
+    }
+    if (_ujs.isArray(target)) {
+      return target.includes(name)
+    }
+  }
+
+  // 判断邮箱格式是否正确
+  _ujs.isMail = (addr) => {
+    return /^([a-zA-Z0-9])+(\.[a-zA-Z0-9])*@(\w)+(\.\w{2,3}){1,}$/.test(addr)
+  }
+
+  // 是否未定义
+  _ujs.isUndefined = (v) => {
+    return typeof v === 'undefined' && Object.prototype.toString.call(v) === '[object Undefined]'
+  }
+
   // 获取解析地址栏参数
   _ujs.httpParams = (address) => {
-    let _Exgr = new RegExp(/[?|&]([a-zA-Z0-9_%*()+-.,])+=([a-zA-Z0-9_%*()+-.,])+/g)
+    let _Exgr = new RegExp('[?|&]([a-zA-Z0-9_%*()+-.,])+=([a-zA-Z0-9_%*()+-.,])+', 'g')
     let _ArrData = address.match(_Exgr)
     let _Obj = {}
     for (let i = 0; i < _ArrData.length; i++) {
@@ -302,9 +322,77 @@
     })
   }
 
+  // 数组排序（二分法针对大量数据）
+  _ujs.sort = (arr, start, end) => {
+    if (!_ujs.isArray(arr)) {
+      console.error('TypeError: params is not Array')
+      return
+    }
+    if (_ujs.isUndefined(start)) {
+      start = 0
+    }
+    if (_ujs.isUndefined(end)) {
+      end = arr.length - 1
+    }
+    let _changePosition = (_i, _j) => {
+      let v = arr.splice(_i, 1, arr[_j])
+      arr.splice(_j, 1, v[0])
+    }
+    let _middlePoint = (start, end) => {
+      let _index = start
+      let _mark = arr[end]
+      for (let i = start; i < end; i++) {
+        if (arr[i] < _mark) {
+          _changePosition(_index, i)
+          _index++
+        }
+      }
+      _changePosition(_index, end)
+      return _index
+    }
+    let _sort = (start, end) => {
+      if (start > end) return
+      let _markIndex = _middlePoint(start, end)
+      _sort(start, _markIndex - 1)
+      _sort(_markIndex + 1, end)
+    }
+    _sort(start, end)
+    return arr
+  }
+
+  // 获取自定义格式日期
+  _ujs.formatDate = ({date, format = 'yyyy-mm-dd h:m:s'}) => {
+    if (!_ujs.isString(format)) {
+      return
+    }
+    let _date = _ujs.isUndefined(date) ? new Date() : new Date(date)
+    let _doubleNum = (num) => {
+      return ('0' + num).slice(-2) 
+    }
+    let _currentDate = {
+      'yyyy': _date.getFullYear(),
+      'mm': _doubleNum(_date.getMonth() + 1),
+      'dd': _doubleNum(_date.getDate()),
+      'h': _doubleNum(_date.getHours()),
+      'm': _doubleNum(_date.getMinutes()),
+      's': _doubleNum(_date.getSeconds())
+    }
+    Object.keys(_currentDate).forEach(key => {
+      let _Exgr = new RegExp(key, 'ig')
+      if (_Exgr.test(format)) {
+        format = format.replace(_Exgr, _currentDate[key])
+      }
+    })
+    return format
+  }
+
 
   _ujs.EmitClass = EmitClass    // 事件监听及分发
   _ujs.version = version
+
+  Object.prototype.isHas = (name) => {
+    _ujs.isHas(this, name)
+  }
 
   // Object.keys(_ujs).forEach(it => {
   //   Object.prototype[it] = _ujs[it]
