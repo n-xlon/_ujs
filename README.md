@@ -32,6 +32,9 @@ isObject() // 是否为对象
 isFunction() // 是否为函数 
 isArray() // 是否为数组
 isNumber() // 是否为数字
+isHas() // 数组或对象中是否有已知值
+isMail() // 检测邮箱格式是否正确
+isUndefined() // 变量是否存在
 ```
 - #### 解析地址栏参数
 ```javascript
@@ -78,4 +81,14 @@ ujs.ajax({url, method, headers, data, type})
 * params argv 扩展参数（需写入FormData中的）
 */
 ujs.uploadFile({url, file, type, argv})
+```
+- #### sort 数组排序（二分法快速排序）
+```javascript
+ujs.sort([...argvs])
+```
+- #### formatDate 自定义日期格式
+```javascript
+const date = ujs.formatDate({format: 'yyyy-mm-dd'})
+console.log(date)
+'2019-08-24'
 ```
