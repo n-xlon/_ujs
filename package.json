@@ -1,0 +1,22 @@
+{
+  "name": "ujs",
+  "version": "1.0.0",
+  "description": "javascript methods",
+  "main": "ujs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n-xlon/_ujs.git"
+  },
+  "keywords": [
+    "js"
+  ],
+  "author": "xm",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n-xlon/_ujs/issues"
+  },
+  "homepage": "https://github.com/n-xlon/_ujs#readme"
+}
