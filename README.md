@@ -90,5 +90,6 @@ ujs.sort([...argvs])
 ```javascript
 const date = ujs.formatDate({format: 'yyyy-mm-dd'})
 console.log(date)
+
 '2019-08-24'
 ```

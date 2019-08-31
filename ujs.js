@@ -398,9 +398,9 @@
   //   Object.prototype[it] = _ujs[it]
   // })
 
-  if (!noGlobal) {
-    window.ujs = _ujs
-  }
+ //  if (!noGlobal) {
+ //   window.ujs = _ujs
+ // }
 
   return ujs
 })
