@@ -402,5 +402,6 @@
  //   window.ujs = _ujs
  // }
 
-  return ujs
+  return _ujs
+
 })
