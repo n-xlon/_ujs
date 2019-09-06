@@ -20,6 +20,20 @@ Events.off(name, fn) // 取消当前监听事件
 Events.maxListenNums = nums // 设置最大监听数
 Events._currentListenEventsName // 获取当前所有监听事件名称
 ```
+- #### Worker 线程创建
+```javascript
+const ujs = require('ujs')
+const worker = new ujs.ExecWorker()
+
+// 接收子线程发送的消息，并绑定到自定义方法
+worker.bind('message', () => { // ...todo })
+
+// 发送消息给子线程
+worker.send(msg)
+
+// 主进程主动关闭子线程
+worker.closeWorker()
+```
 - #### insert 方法
 ```javascript
 // 向ujs对象注入自定义方法
