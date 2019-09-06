@@ -1,6 +1,6 @@
 ## ujs - 各类方法集
 
-### 调用方法
+- #### 调用方法
 ```javascript
 // common.js方式
 const ujs = require('ujs')
@@ -31,7 +31,7 @@ worker.bind('message', () => { // ...todo })
 // 发送消息给子线程
 worker.send(msg)
 
-// 主进程主动关闭子线程
+// 主线程window主动关闭子线程
 worker.closeWorker()
 ```
 - #### insert 方法
