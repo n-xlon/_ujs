@@ -118,6 +118,79 @@
       return Array.from(new Set([...Object.keys(this.eventEmits), ...Object.keys(this.onceEvent)]))
     }
   }
+  
+  // 创建子线程处理数据
+  class ExecWorker extends EmitClass {
+    constructor (opts) {
+      super(opts)
+      this.worker = null
+      this.name = ''
+      this.init(opts)
+    }
+
+    // 初始化worker
+    init (opts) {
+      if (!_ujs.isObject(opts)) {
+        console.error('TypeError: opts is not a object')
+        return
+      }
+      let {url, ...config} = opts
+      if (_ujs.isUndefined(url)) {
+        console.error('TypeError: worker need a url')
+        return
+      }
+      if (!_ujs.isUndefined(config.name)) {
+        this.name = this.customWorkerName()
+      }
+      this.worker = new Worker(url, {
+        ...config,
+        name: this.name
+      })
+      this.listenEvents()
+    }
+
+    // 绑定方法
+    bind (name, fn) {
+      this.on(name, fn)
+    }
+
+    // 定义随机worker name
+    customWorkerName () {
+      return `worker_${new Date().getTime().toString(32)}`
+    }
+
+    // 往子线程发送消息
+    send (msg) {
+      this.worker.postMessage(JSON.stringify(msg))
+    }
+
+    // 接收到worker线程发送的消息
+    message (msg) {
+      console.log(msg, self)
+      this.emit('message', msg)
+    }
+
+    // 接收到worker线程error消息
+    errorEvent (err) {
+      this.emit('error', err)
+    }
+
+    listenEvents () {
+      this.worker.addEventListener('message', this.message.bind(this))
+      this.worker.addEventListener('error', this.errorEvent.bind(this))
+    }
+
+    // 关闭线程
+    closeWorker () {
+      this.worker.removeEventListener('message', this.message)
+      this.worker.removeEventListener('error', this.errorEvent)
+      this.worker.terminate()
+    }
+
+    get currentWorker () {
+      return this.worker
+    }
+  }
 
   // 注入自定义方法
   _ujs._insert = (name, fn) => {
@@ -388,6 +461,7 @@
 
 
   _ujs.EmitClass = EmitClass    // 事件监听及分发
+  _ujs.ExecWorker = ExecWorker
   _ujs.version = version
 
   Object.prototype.isHas = (name) => {
