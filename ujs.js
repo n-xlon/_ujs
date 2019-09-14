@@ -464,18 +464,6 @@
   _ujs.ExecWorker = ExecWorker
   _ujs.version = version
 
-  Object.prototype.isHas = (name) => {
-    _ujs.isHas(this, name)
-  }
-
-  // Object.keys(_ujs).forEach(it => {
-  //   Object.prototype[it] = _ujs[it]
-  // })
-
- //  if (!noGlobal) {
- //   window.ujs = _ujs
- // }
-
   return _ujs
 
 })
